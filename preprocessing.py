@@ -35,29 +35,13 @@ def data_augmentation(dataset, seed=(2,3)):
 	def augment(image, label):
 		augmented_image = tf.image.stateless_random_flip_left_right(image, seed = seed)
 		augmented_image = tf.image.stateless_random_flip_up_down(image, seed = seed)
-		augmented_image = tf.image.stateless_random_brightness(image, max_delta = 0.2, seed = seed)
-		augmented_image = tf.image.stateless_random_contrast(image, lower = 0.1, upper = 0.9 , seed = seed)
-		augmented_image = tf.image.stateless_random_hue(image, max_delta = 0.2 , seed= seed)
-		augmented_image = tf.image.stateless_random_saturation(image, lower = 0.1, upper = 0.9, seed=seed)
-		augmented_image = tf.image.stateless_random_jpeg_quality(image, 75, 95, seed = seed)
+		augmented_image = tf.image.stateless_random_brightness(image, max_delta = 0.1, seed = seed)
+		#augmented_image = tf.image.stateless_random_contrast(image, lower = 0.1, upper = 0.9 , seed = seed)
+		#augmented_image = tf.image.stateless_random_hue(image, max_delta = 0.2 , seed= seed)
+		#augmented_image = tf.image.stateless_random_saturation(image, lower = 0.1, upper = 0.9, seed=seed)
 		return (augmented_image, label)
 
-
-
-	data_augmentation = tf.keras.Sequential([tf.keras.layers.RandomBrightness(0.2),
-											 tf.keras.layers.RandomContrast(0.2),
-										  	 tf.keras.layers.RandomFlip("horizontal_and_vertical"), 
-											 tf.keras.layers.RandomRotation(0.2), 
-											 tf.keras.layers.RandomZoom(0.2),
-    										 #tf.keras.layers.RandomCrop(height=224, width=224),
-											 #tf.keras.layers.RandomHeight(0.2),
-											 #tf.keras.layers.RandomWidth(0.2),
-											 #tf.keras.layers.RandomTranslation(height_factor=0.9,width_factor=0.9)
-											 ])
-	
-
-	dataset =  dataset.map(lambda x,y: (data_augmentation(x, training=True), y))
-	#dataset = dataset.map(augment, num_parallel_calls=tf.data.AUTOTUNE)
+	dataset = dataset.map(augment, num_parallel_calls=tf.data.AUTOTUNE)
 
 	return dataset
 

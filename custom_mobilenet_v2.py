@@ -97,9 +97,9 @@ def MobileNet_v2(input_shape, alpha, num_classes, dropout):
     x = keras.layers.ReLU()(x)
 
     if num_classes > 2:
-        output = keras.layers.Dense(num_classes, activation='softmax')(x)
+            output = keras.layers.Dense(num_classes, activation='softmax')(x)
     else:
-        output = keras.layers.Dense(1, activation='sigmoid')(x)
+            output = keras.layers.Dense(1, activation='sigmoid')(x)
 
     
     model = keras.Model(input,output)
