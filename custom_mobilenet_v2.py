@@ -1,3 +1,4 @@
+import os;os.environ["TF_USE_LEGACY_KERAS"]="1"
 import tf_keras as keras
 
 def make_divisible(v, divisor, min_value=None):
@@ -45,7 +46,7 @@ def inverted_redsidual_block(input, filters, alpha, expansion_factor, strides=(1
     return x
 
 
-def MobileNet_v2(input_shape, alpha, num_classes, dropout):
+def MobileNet_v2(input_shape, alpha, num_classes, dropout, minimization = False):
 
     input = keras.Input(shape=input_shape)
 
@@ -76,10 +77,12 @@ def MobileNet_v2(input_shape, alpha, num_classes, dropout):
     x = inverted_redsidual_block(x, 96,     alpha, expansion_factor=6)
 
     x = inverted_redsidual_block(x, 160,    alpha, expansion_factor=6, strides=(2,2))
-    x = inverted_redsidual_block(x, 160,    alpha, expansion_factor=6)
-    x = inverted_redsidual_block(x, 160,    alpha, expansion_factor=6)
 
-    x = inverted_redsidual_block(x, 320,    alpha, expansion_factor=6)
+    if minimization==False:
+        x = inverted_redsidual_block(x, 160,    alpha, expansion_factor=6)
+        x = inverted_redsidual_block(x, 160,    alpha, expansion_factor=6)
+
+        x = inverted_redsidual_block(x, 320,    alpha, expansion_factor=6)
 
     x = keras.layers.Conv2D(1280, kernel_size=(1,1), padding='same', use_bias=False)(x)
     x = keras.layers.BatchNormalization()(x)

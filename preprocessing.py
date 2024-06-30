@@ -87,3 +87,10 @@ def dataset_preprocessing(dataset, train_size=0.8, validation_size=0.1, augmenta
 		testing_dataset = dataset_prefetch(testing_dataset)	
 
 	return training_dataset, validation_dataset, testing_dataset
+
+
+
+def mixup(images, labels):
+    alpha = tf.random.uniform([], 0, 1)
+    mixedup_images = alpha * images + (1 - alpha) * tf.reverse(images, axis=[0])
+    return mixedup_images, labels
